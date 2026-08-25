@@ -1,0 +1,10 @@
+pip freeze > requirements.txt
+
+git init
+git remote add origin https://github.com/skmishra2801/CPL.git
+git add .
+git commit -m "Initial commit for City Club Premier League"
+git branch -M main
+git push -u origin main
+git status
+

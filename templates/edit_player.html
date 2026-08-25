@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2><i class="bi bi-pencil-square"></i> Edit Player</h2>
+    <form method="POST" enctype="multipart/form-data" class="mt-4">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ player.name }}" required>
+            </div>
+            <div class="col-md-6">
+                <label for="role" class="form-label">Role</label>
+                <select class="form-select" id="role" name="role" required>
+                    <option value="Batsman" {% if player.role == 'Batsman' %}selected{% endif %}>Batsman</option>
+                    <option value="Bowler" {% if player.role == 'Bowler' %}selected{% endif %}>Bowler</option>
+                    <option value="All-rounder" {% if player.role == 'All-rounder' %}selected{% endif %}>All-rounder</option>
+                    <option value="Wicketkeeper" {% if player.role == 'Wicketkeeper' %}selected{% endif %}>Wicketkeeper</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="batting_style" class="form-label">Batting Style</label>
+                <select class="form-select" id="batting_style" name="batting_style">
+                    <option value="Right-handed" {% if player.batting_style == 'Right-handed' %}selected{% endif %}>Right-handed</option>
+                    <option value="Left-handed" {% if player.batting_style == 'Left-handed' %}selected{% endif %}>Left-handed</option>
+                    <option value="">None</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="bowling_style" class="form-label">Bowling Style</label>
+                <select class="form-select" id="bowling_style" name="bowling_style">
+                    <option value="Right-arm fast" {% if player.bowling_style == 'Right-arm fast' %}selected{% endif %}>Right-arm fast</option>
+                    <option value="Right-arm spin" {% if player.bowling_style == 'Right-arm spin' %}selected{% endif %}>Right-arm spin</option>
+                    <option value="Left-arm fast" {% if player.bowling_style == 'Left-arm fast' %}selected{% endif %}>Left-arm fast</option>
+                    <option value="Left-arm spin" {% if player.bowling_style == 'Left-arm spin' %}selected{% endif %}>Left-arm spin</option>
+                    <option value="">None</option>
+                </select>
+            </div>
+
+            <!-- IMAGE UPLOAD FIELD - ADD THIS BLOCK -->
+            <div class="col-md-12">
+                <label for="image" class="form-label">Profile Image (optional)</label>
+                <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                {% if player.image_path %}
+                <div class="mt-2">
+                    <img src="{{ player.image_path }}" alt="Current Image" style="max-height:150px; border-radius:8px; border:1px solid #ddd;">
+                    <p class="text-muted small mt-1">Current image – upload a new one to replace it.</p>
+                </div>
+                {% else %}
+                <p class="text-muted small mt-1">No image uploaded yet.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-4">Update Player</button>
+        <a href="{{ url_for('team_details', team_id=player.team_id) if player.team_id else url_for('players') }}"
+           class="btn btn-secondary mt-4">Cancel</a>
+    </form>
+</div>
+{% endblock %}

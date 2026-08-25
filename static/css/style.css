@@ -1,0 +1,10 @@
+/* Add any extra custom styles here */
+body {
+    background-color: #f8f9fa;
+}
+.navbar-brand i {
+    margin-right: 5px;
+}
+.card {
+    border-radius: 12px;
+}

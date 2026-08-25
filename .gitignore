@@ -1,0 +1,55 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+ENV/
+env/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Database (SQLite)
+instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# SSL certificates
+ca.pem
+*.pem
+*.crt
+*.key
+
+# Uploaded media – uncomment if you don't want to track them
+# static/uploads/
+# !static/uploads/.gitkeep   # if you want to keep the folder
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Flask session
+flask_session/
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+.pytest_cache/
+
+# Migrations (optional – keep if you want to version them)
+# migrations/

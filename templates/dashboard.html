@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2><i class="bi bi-speedometer2"></i> Dashboard</h2>
+
+    <div class="row g-4 mt-3">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5 class="card-title">Total Players</h5>
+                    <p class="display-6">{{ players|length }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">Teams</h5>
+                    <p class="display-6">{{ teams|length }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title">Sold Players</h5>
+                    <p class="display-6">{{ players|selectattr('sold', 'equalto', True)|list|length }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <h5 class="card-title">Auction Logs</h5>
+                    <p class="display-6">{{ logs|length }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="mt-5">Recent Auction Activity</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr><th>Time</th><th>Player</th><th>Team</th><th>Price</th></tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr>
+                <td>{{ log.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>{{ log.player.name if log.player else 'Deleted' }}</td>
+                <td>{{ log.team.name if log.team else 'Deleted' }}</td>
+                <td>{{ log.sold_price }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4">No auctions yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

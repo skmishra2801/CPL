@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2><i class="bi bi-person-plus"></i> Register Player</h2>
+    <form method="POST" enctype="multipart/form-data" class="mt-4">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="col-md-6">
+                <label for="role" class="form-label">Role</label>
+                <select class="form-select" id="role" name="role" required>
+                    <option value="Batsman">Batsman</option>
+                    <option value="Bowler">Bowler</option>
+                    <option value="All-rounder">All-rounder</option>
+                    <option value="Wicketkeeper">Wicketkeeper</option>
+                </select>
+            </div>
+            <div class="col-md-6" id="batting_group">
+                <label for="batting_style" class="form-label">Batting Style</label>
+                <select class="form-select" id="batting_style" name="batting_style">
+                    <option value="Right-handed">Right-handed</option>
+                    <option value="Left-handed">Left-handed</option>
+                </select>
+            </div>
+            <div class="col-md-6" id="bowling_group">
+                <label for="bowling_style" class="form-label">Bowling Style</label>
+                <select class="form-select" id="bowling_style" name="bowling_style">
+                    <option value="Right-arm fast">Right-arm fast</option>
+                    <option value="Right-arm spin">Right-arm spin</option>
+                    <option value="Left-arm fast">Left-arm fast</option>
+                    <option value="Left-arm spin">Left-arm spin</option>
+                    <option value="None">None</option>
+                </select>
+            </div>
+            <div class="col-md-12">
+                <label for="image" class="form-label">Profile Image</label>
+                <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-4">Register Player</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const roleSelect = document.getElementById('role');
+        const battingGroup = document.getElementById('batting_group');
+        const bowlingGroup = document.getElementById('bowling_group');
+
+        function toggleFields() {
+            const role = roleSelect.value;
+            if (role === 'Batsman' || role === 'Wicketkeeper') {
+                battingGroup.style.display = 'block';
+                bowlingGroup.style.display = 'none';
+                document.getElementById('bowling_style').value = 'None'; // set default
+            } else if (role === 'Bowler') {
+                battingGroup.style.display = 'none';
+                bowlingGroup.style.display = 'block';
+                document.getElementById('batting_style').value = 'Right-handed'; // default
+            } else if (role === 'All-rounder') {
+                battingGroup.style.display = 'block';
+                bowlingGroup.style.display = 'block';
+            }
+        }
+
+        roleSelect.addEventListener('change', toggleFields);
+        toggleFields(); // initial state
+    });
+</script>
+{% endblock %}
