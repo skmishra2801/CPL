@@ -28,12 +28,15 @@ print("Using Cloudinary cloud name:", cloudinary.config().cloud_name)
 # cloudinary.config(
 #     url=os.environ.get('CLOUDINARY_URL')
 # )
-DATABASE_URI = os.environ.get('DATABASE_URI')
-app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
+# DATABASE_URI = os.environ.get('DATABASE_URI')
+# app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# db.init_app(app)
+# migrate = Migrate(app, db)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///auction.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
-migrate = Migrate(app, db)
-
 # Upload folder for local images
 UPLOAD_FOLDER = 'static/uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
