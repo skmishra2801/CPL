@@ -7,9 +7,30 @@ import cloudinary
 import cloudinary.uploader
 from cloudinary.utils import cloudinary_url
 from flask_migrate import Migrate
+import requests
 from dotenv import load_dotenv
 load_dotenv()
 
+
+def upload_to_imgbb(image_file):
+    api_key = os.environ.get('IMGBB_API_KEY')
+    if not api_key:
+        raise ValueError("IMGBB_API_KEY not set")
+
+    url = "https://api.imgbb.com/1/upload"
+    payload = {
+        "key": api_key,
+    }
+    # image_file is a file-like object from Flask request.files
+    files = {
+        "image": image_file
+    }
+    response = requests.post(url, data=payload, files=files, timeout=30)
+    if response.status_code == 200:
+        data = response.json()
+        return data['data']['url']  # direct image URL
+    else:
+        raise Exception(f"ImgBB upload failed: {response.text}")
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-change-in-production'
@@ -82,12 +103,19 @@ def register_player():
         #     image_path = f"/{filepath}"
         # else:
         #     image_path = None
-        image = request.files.get('image')
+        # image = request.files.get('image')
+        # image_url = None
+        # if image and allowed_file(image.filename):
+        #     try:
+        #         upload_result = cloudinary.uploader.upload(image, folder="city_club/players")
+        #         image_url = upload_result['secure_url']
+        #     except Exception as e:
+        #         flash(f'Image upload failed: {e}', 'error')
         image_url = None
+        image = request.files.get('image')
         if image and allowed_file(image.filename):
             try:
-                upload_result = cloudinary.uploader.upload(image, folder="city_club/players")
-                image_url = upload_result['secure_url']
+                image_url = upload_to_imgbb(image)
             except Exception as e:
                 flash(f'Image upload failed: {e}', 'error')
 
@@ -124,14 +152,21 @@ def register_team():
         #     logo_path = f"/{filepath}"
         # else:
         #     logo_path = None
-        logo = request.files.get('logo')
+        # logo = request.files.get('logo')
+        # logo_url = None
+        # if logo and allowed_file(logo.filename):
+        #     try:
+        #         upload_result = cloudinary.uploader.upload(logo, folder="city_club/teams")
+        #         logo_url = upload_result['secure_url']
+        #     except Exception as e:
+        #         flash(f'Logo upload failed: {e}', 'error')
         logo_url = None
+        logo = request.files.get('logo')
         if logo and allowed_file(logo.filename):
             try:
-                upload_result = cloudinary.uploader.upload(logo, folder="city_club/teams")
-                logo_url = upload_result['secure_url']
+                image_url = upload_to_imgbb(logo)
             except Exception as e:
-                flash(f'Logo upload failed: {e}', 'error')
+                flash(f'Image upload failed: {e}', 'error')
 
         team = Team(name=team_name, owner=owner, logo_path=logo_url, remaining_funds=0)
         db.session.add(team)
@@ -241,14 +276,21 @@ def edit_player(player_id):
             player.batting_style = request.form.get('batting_style') or None
             player.bowling_style = request.form.get('bowling_style') or None
 
+            # image = request.files.get('image')
+            # if image and allowed_file(image.filename):
+            #     try:
+            #         upload_result = cloudinary.uploader.upload(image, folder="city_club/players")
+            #         player.image_path = upload_result['secure_url']
+            #     except Exception as e:
+            #         flash(f'Image upload failed: {e}', 'error')
+            #         # Continue with old image
+
             image = request.files.get('image')
             if image and allowed_file(image.filename):
                 try:
-                    upload_result = cloudinary.uploader.upload(image, folder="city_club/players")
-                    player.image_path = upload_result['secure_url']
+                    image_url = upload_to_imgbb(image)
                 except Exception as e:
                     flash(f'Image upload failed: {e}', 'error')
-                    # Continue with old image
 
             db.session.commit()
             flash(f'Player {player.name} updated successfully!', 'success')
